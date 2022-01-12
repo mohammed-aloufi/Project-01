@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
-import com.example.scrolly.R
 import com.example.scrolly.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -20,8 +19,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding= ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
     }
