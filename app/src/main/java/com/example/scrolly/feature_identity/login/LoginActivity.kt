@@ -1,4 +1,4 @@
-package com.example.scrolly.views.identity.login
+package com.example.scrolly.feature_identity.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

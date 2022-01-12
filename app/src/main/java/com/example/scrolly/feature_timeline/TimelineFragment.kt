@@ -1,4 +1,4 @@
-package com.example.scrolly.views.main.timeline
+package com.example.scrolly.feature_timeline
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -1,4 +1,4 @@
-package com.example.scrolly.views.main.addpost
+package com.example.scrolly.feature_addpost
 
 import androidx.lifecycle.ViewModel
 

@@ -1,4 +1,4 @@
-package com.example.scrolly.views.identity.register
+package com.example.scrolly.feature_identity.register
 
 import androidx.lifecycle.ViewModel
 

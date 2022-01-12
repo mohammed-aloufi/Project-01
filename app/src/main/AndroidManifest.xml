@@ -10,13 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scrolly">
         <activity
-            android:name=".views.identity.register.RegisterActivity"
+            android:name=".main.Splash"
             android:exported="false" />
         <activity
-            android:name=".views.identity.login.LoginActivity"
+            android:name=".feature_identity.register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".views.main.MainActivity"
+            android:name=".feature_identity.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
