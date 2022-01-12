@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding= ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
     }

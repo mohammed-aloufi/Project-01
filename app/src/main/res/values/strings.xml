@@ -14,4 +14,7 @@
     <string name="confirmPass">Confirm Password</string>
     <string name="register">Register</string>
     <string name="register1">Already a member? Login</string>
+    <string name="forgot">Forgot Your Password?</string>
+    <string name="require">Required!</string>
+    <string name="emailcheck">your email is not correct</string>
 </resources>
