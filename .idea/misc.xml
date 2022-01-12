@@ -3,11 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.29907407407407405" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.21296296296296297" />
-        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.21296296296296297" />
-        <entry key="app/src/main/res/layout/post_list_item_test.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/test.xml" value="0.21296296296296297" />
+        <entry key="..\:/Users/loloa/Desktop/theNewProject/Project-01/app/src/main/res/layout/activity_main.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/loloa/Desktop/theNewProject/Project-01/app/src/main/res/layout/activity_register.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/loloa/Desktop/theNewProject/Project-01/app/src/main/res/layout/activity_splash.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/loloa/Desktop/theNewProject/Project-01/app/src/main/res/layout/fragment_timeline.xml" value="0.19427083333333334" />
       </map>
     </option>
   </component>
