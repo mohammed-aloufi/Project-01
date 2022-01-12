@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.scrolly">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,17 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scrolly">
         <activity
-            android:name=".main.Splash"
-            android:exported="false" />
+            android:name=".main.MainActivity"
+            android:exported="true" />
         <activity
             android:name=".feature_identity.register.RegisterActivity"
+            android:theme="@style/Splash"
             android:exported="false" />
         <activity
             android:name=".feature_identity.login.LoginActivity"
+            android:theme="@style/Splash"
             android:exported="false" />
         <activity
-            android:name=".main.MainActivity"
-            android:exported="true">
+            android:name=".main.Splash"
+            android:exported="true"
+            android:theme="@style/Splash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
