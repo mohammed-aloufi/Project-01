@@ -85,7 +85,4 @@ dependencies {
 
     // for language
     implementation 'com.akexorcist:localization:1.2.11'
-
-    //Bottom nav bar library
-    implementation 'com.etebarian:meow-bottom-navigation:1.3.1'
 }
