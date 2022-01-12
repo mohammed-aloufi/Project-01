@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="profile_image_style">
+        <item name="cornerRadius">50dp</item>
+        <item name="cornerSize">50%</item>
+        <item name="android:background">@color/white</item>
+    </style>
+</resources>
