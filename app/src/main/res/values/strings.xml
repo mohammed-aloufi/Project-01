@@ -5,4 +5,13 @@
     <string name="like_btn_desc">Like this post</string>
     <string name="comment_txtView_label">Comment</string>
     <string name="comments_btn_desc">comments</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="New">New here? Register</string>
+    <string name="Register">Register</string>
+    <string name="Username">Username</string>
+    <string name="confirmPass">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="register1">Already a member? Login</string>
 </resources>

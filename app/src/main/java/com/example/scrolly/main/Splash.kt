@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.scrolly.R
 import com.example.scrolly.databinding.ActivitySplashBinding
+import com.example.scrolly.repositories.FirebaseRepo
 
 class Splash : AppCompatActivity() {
     private lateinit var binding:ActivitySplashBinding
@@ -13,7 +14,9 @@ class Splash : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding= ActivitySplashBinding.inflate(layoutInflater)
+        FirebaseRepo.init(this)
         setContentView(binding.root)
+
 
         binding.motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(
