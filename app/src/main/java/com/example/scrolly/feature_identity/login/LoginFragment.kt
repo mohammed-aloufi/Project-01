@@ -18,17 +18,38 @@ import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentLoginBinding
 import com.example.scrolly.main.SHARED_PREF_FILE
 import com.example.scrolly.main.STATE
+import com.example.scrolly.main.USER_ID
 import com.example.scrolly.util.RegisterValidation
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val loginViewModel: LoginViewMode by activityViewModels()
     //private lateinit var progressDialog: ProgressDialog
+    //private lateinit var bottomNav: BottomNavigationView
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var sharedPref:SharedPreferences
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+        sharedPref= requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
+
+
+//        if (sharedPref.getBoolean(STATE, false)){
+//            findNavController().navigate(R.id.action_loginFragment_to_timelineFragment)
+//        }else{
+//            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+//        }
+    }
 
 //
 
@@ -37,11 +58,19 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        firebaseAuth = FirebaseAuth.getInstance()
-//        sharedPref= requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
-//        if (sharedPref.getBoolean(STATE, false))
 
-      //  if(FirebaseAuth.)
+
+        firebaseAuth= FirebaseAuth.getInstance()
+        observers()
+
+     //  bottomNav=activity!!.findViewById(R.id.bottomNavView)
+
+
+
+//      if(firebaseAuth.currentUser?.uid.isNullOrBlank()){
+//          findNavController().navigate(R.id.acti)
+//
+//      }
 
         binding= FragmentLoginBinding.inflate(inflater,container,false)
         return binding.root
@@ -51,6 +80,10 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+      //  activity!!.findViewById<BottomAppBar>(R.id.bottomNavView)?.visibility=View.GONE
+         //bottomNav.visibility=View.GONE
+
+
 
         binding.goToRegisTextView.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -72,20 +105,26 @@ class LoginFragment : Fragment() {
         }
 
 
-
-
-
         binding.goToRegisTextView2.setOnClickListener {
 
            showdialog()
         }
 
+
+
+
+    }
+    fun observers(){
         loginViewModel.loginLiveData.observe(viewLifecycleOwner, {
             val dialog = setProgressDialog(requireContext(), "Loading..")
             it?.let {
+                val sharedPrefEdit = sharedPref.edit()
 
                 dialog.hide()
                 Toast.makeText(requireActivity(), "login successfully", Toast.LENGTH_SHORT).show()
+                sharedPrefEdit.putBoolean(STATE, true)
+                sharedPrefEdit.putString(USER_ID,FirebaseAuth.getInstance().currentUser!!.uid)
+                sharedPrefEdit.commit()
                 loginViewModel.loginLiveData.postValue(null)
                 //checkLoggedInState()
                 findNavController().navigate(R.id.action_loginFragment_to_timelineFragment)
@@ -101,7 +140,6 @@ class LoginFragment : Fragment() {
                 loginViewModel.loginErrorLiveData.postValue(null)
             }
         })
-
     }
 
     fun setProgressDialog(context: Context, message:String): AlertDialog {
@@ -180,7 +218,7 @@ class LoginFragment : Fragment() {
 
     fun showdialog(){
         val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(requireActivity())
-        builder.setTitle("Title")
+        builder.setTitle("Reset Password")
 
 // Set up the input
         val input = EditText(requireContext())
@@ -192,16 +230,23 @@ class LoginFragment : Fragment() {
 // Set up the buttons
         builder.setPositiveButton("Send Password", DialogInterface.OnClickListener { dialog, which ->
             // Here you get get input text from the Edittext
-            FirebaseAuth.getInstance().sendPasswordResetEmail(input.text.toString()).addOnCompleteListener {
-                if (it.isSuccessful)
-                {
-                    Toast.makeText(requireActivity(), "Password Sent Successfully", Toast.LENGTH_SHORT).show()
+            val email= input.text.toString()
+            if (email.isNotEmpty()){
+                FirebaseAuth.getInstance().sendPasswordResetEmail(input.text.toString()).addOnCompleteListener {
+                    if (it.isSuccessful)
+                    {
+                        Toast.makeText(requireActivity(), "Password Sent Successfully", Toast.LENGTH_SHORT).show()
+                    }
+                    else
+                    {
+                        Toast.makeText(requireActivity(), it.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
                 }
-                else
-                {
-                    Toast.makeText(requireActivity(), it.exception.toString(), Toast.LENGTH_SHORT).show()
-                }
+
+            }else {
+                Toast.makeText(requireActivity(), "You need to put your email first", Toast.LENGTH_SHORT).show()
             }
+
         })
         builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 

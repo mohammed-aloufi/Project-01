@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/registerFragment">
+    app:startDestination="@id/timelineFragment">
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.example.scrolly.feature_addPost.AddPostFragment"
@@ -23,8 +23,12 @@
     <fragment
         android:id="@+id/timelineFragment"
         android:name="com.example.scrolly.feature_timeline.TimelineFragment"
-        android:label="fragment_timeline"
-        tools:layout="@layout/fragment_timeline" />
+        android:label="@string/main"
+        tools:layout="@layout/fragment_timeline">
+        <action
+            android:id="@+id/action_timelineFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
@@ -37,5 +41,19 @@
         <action
             android:id="@+id/action_loginFragment_to_timelineFragment"
             app:destination="@id/timelineFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.scrolly.profile.ProfileFragment"
+        android:label="@string/Profile"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_timelineFragment"
+            app:destination="@id/timelineFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
