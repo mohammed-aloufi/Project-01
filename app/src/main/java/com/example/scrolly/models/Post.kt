@@ -4,7 +4,8 @@ import java.util.*
 
 data class Post(
     val id: String = UUID.randomUUID().toString(),
-    val postMessage: String? = null,
+    var postMessage: String? = null,
     val postImageUrl: String? = null,
-    val likes: Int = 0
+    val likes: Int = 0,
+    val timestamp: Long? = Date().time
 )

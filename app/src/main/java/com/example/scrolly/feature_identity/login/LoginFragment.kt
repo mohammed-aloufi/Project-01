@@ -22,6 +22,7 @@ import com.example.scrolly.main.USER_ID
 import com.example.scrolly.util.RegisterValidation
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -105,6 +106,9 @@ class LoginFragment : Fragment() {
         }
 
 
+
+
+
         binding.goToRegisTextView2.setOnClickListener {
 
            showdialog()
@@ -140,6 +144,7 @@ class LoginFragment : Fragment() {
                 loginViewModel.loginErrorLiveData.postValue(null)
             }
         })
+
     }
 
     fun setProgressDialog(context: Context, message:String): AlertDialog {

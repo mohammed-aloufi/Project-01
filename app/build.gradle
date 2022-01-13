@@ -85,4 +85,19 @@ dependencies {
 
     // for language
     implementation 'com.akexorcist:localization:1.2.11'
+
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1'
+
+    // Coroutine Lifecycle Scopes
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
+
+    //Firebase with coroutine
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+
+    // image loaders
+    implementation("io.coil-kt:coil:1.4.0")
 }

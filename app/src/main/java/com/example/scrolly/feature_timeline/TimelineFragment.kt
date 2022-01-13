@@ -1,24 +1,24 @@
 package com.example.scrolly.feature_timeline
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.scrolly.R
+import coil.load
 import com.example.scrolly.databinding.FragmentTimelineBinding
 import com.example.scrolly.databinding.TimelineListItemBinding
 import com.example.scrolly.models.Post
+import com.example.scrolly.utils.getTimeAgo
 
+private const val TAG = "TimelineFragment"
 class TimelineFragment : Fragment() {
 
-    private val timeLineViewModel by lazy {
-        ViewModelProvider(this)[TimelineViewModel::class.java]
-    }
+    private val timeLineViewModel: TimelineViewModel by activityViewModels()
 
     private lateinit var binding: FragmentTimelineBinding
 
@@ -28,13 +28,21 @@ class TimelineFragment : Fragment() {
     ): View {
         binding = FragmentTimelineBinding.inflate(layoutInflater)
 
-        binding.timelineRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = TimeLineAdapter(timeLineViewModel.dummyPosts)
-        }
+        setLayoutManger()
+        observePosts()
         return binding.root
     }
 
+    private fun setLayoutManger(){
+        binding.timelineRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun observePosts(){
+        timeLineViewModel.getPosts().observe(viewLifecycleOwner, {
+            binding.timelineRecyclerView.adapter = TimeLineAdapter(it)
+            Log.d(TAG, "observePosts: $it")
+        })
+    }
 
     var t = false
     private inner class TimeLineViewHolder(val binding: TimelineListItemBinding) :
@@ -42,17 +50,14 @@ class TimelineFragment : Fragment() {
 
         fun bind(post: Post) {
             binding.postMsgxtView.text = post.postMessage.toString()
-            binding.usernameTxtView.text = "test"
-            binding.periodTxtView.text = "2 days ago"
-            binding.likeCountTxtView.text = "22"
-            binding.likeImageBtn.setOnClickListener{
-                findNavController().navigate(R.id.action_timelineFragment_to_loginFragment)
-
+            binding.usernameTxtView.text = post.postMessage
+            binding.periodTxtView.text = post.timestamp?.getTimeAgo()
+            binding.likeCountTxtView.text = post.likes.toString()
+            if (post.postImageUrl.isNullOrBlank()){
+                binding.postImgImgView.visibility = View.GONE
+            }else{
+                binding.postImgImgView.load(post.postImageUrl)
             }
-            if (t) binding.postImgImgView.visibility = View.GONE
-
-            else binding.postImgImgView.visibility = View.VISIBLE
-            t = !t
         }
     }
 

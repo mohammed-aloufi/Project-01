@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scrolly.models.User
 import com.example.scrolly.repositories.FirebaseRepo
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +30,7 @@ class RegisterViewModel:ViewModel() {
                 response.addOnCompleteListener {
                     if (it.isSuccessful) {
                         adddDisplayName(display)
+                        firebaseRepo.createProfile(User(userName = display))
                     }else{
                         registerErrorLiveData.postValue(response.exception!!.message)
                     }
