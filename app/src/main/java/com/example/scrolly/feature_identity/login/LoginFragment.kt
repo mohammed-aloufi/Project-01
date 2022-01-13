@@ -18,8 +18,11 @@ import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentLoginBinding
 import com.example.scrolly.main.SHARED_PREF_FILE
 import com.example.scrolly.main.STATE
+import com.example.scrolly.main.USER_ID
 import com.example.scrolly.util.RegisterValidation
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class LoginFragment : Fragment() {
@@ -30,6 +33,20 @@ class LoginFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var sharedPref:SharedPreferences
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedPref= requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
+
+
+//        if (sharedPref.getBoolean(STATE, false)){
+//            findNavController().navigate(R.id.action_loginFragment_to_timelineFragment)
+//        }else{
+//            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+//        }
+    }
+
 //
 
 
@@ -37,11 +54,15 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        firebaseAuth = FirebaseAuth.getInstance()
-//        sharedPref= requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
-//        if (sharedPref.getBoolean(STATE, false))
+        firebaseAuth= FirebaseAuth.getInstance()
+        observers()
 
-      //  if(FirebaseAuth.)
+
+
+//      if(firebaseAuth.currentUser?.uid.isNullOrBlank()){
+//          findNavController().navigate(R.id.acti)
+//
+//      }
 
         binding= FragmentLoginBinding.inflate(inflater,container,false)
         return binding.root
@@ -51,6 +72,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+
+
 
         binding.goToRegisTextView.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -72,20 +95,26 @@ class LoginFragment : Fragment() {
         }
 
 
-
-
-
         binding.goToRegisTextView2.setOnClickListener {
 
            showdialog()
         }
 
+
+
+
+    }
+    fun observers(){
         loginViewModel.loginLiveData.observe(viewLifecycleOwner, {
             val dialog = setProgressDialog(requireContext(), "Loading..")
             it?.let {
+                val sharedPrefEdit = sharedPref.edit()
 
                 dialog.hide()
                 Toast.makeText(requireActivity(), "login successfully", Toast.LENGTH_SHORT).show()
+                sharedPrefEdit.putBoolean(STATE, true)
+                sharedPrefEdit.putString(USER_ID,FirebaseAuth.getInstance().currentUser!!.uid)
+                sharedPrefEdit.commit()
                 loginViewModel.loginLiveData.postValue(null)
                 //checkLoggedInState()
                 findNavController().navigate(R.id.action_loginFragment_to_timelineFragment)
@@ -101,7 +130,6 @@ class LoginFragment : Fragment() {
                 loginViewModel.loginErrorLiveData.postValue(null)
             }
         })
-
     }
 
     fun setProgressDialog(context: Context, message:String): AlertDialog {
