@@ -50,7 +50,7 @@ class TimelineFragment : Fragment() {
 
         fun bind(post: Post) {
             binding.postMsgxtView.text = post.postMessage.toString()
-            binding.usernameTxtView.text = timeLineViewModel.getUserInfo(post.userId).userName
+           // binding.usernameTxtView.text = timeLineViewModel.getUserInfo(post.userId).userName
             binding.periodTxtView.text = post.timestamp?.getTimeAgo()
             binding.likeCountTxtView.text = post.likes.toString()
             if (post.postImageUrl.isNullOrBlank()){

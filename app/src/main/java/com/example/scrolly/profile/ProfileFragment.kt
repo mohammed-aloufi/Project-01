@@ -90,9 +90,9 @@ class ProfileFragment : Fragment() {
                 openGalleryLauncher.launch("image/*")
             }
         }
-        binding.saveChangesBtn.setOnClickListener {
-            profileViewModel.uploadProfileImage(FirebaseAuth.getInstance().currentUser?.uid!!, profileViewModel.imageUri!!)
-        }
+//        binding.saveChangesBtn.setOnClickListener {
+//            profileViewModel.uploadProfileImage(FirebaseAuth.getInstance().currentUser?.uid!!, profileViewModel.imageUri!!)
+//        }
     }
 
     private fun showAlert(){
