@@ -16,7 +16,7 @@ private const val TAG = "FirebaseRepo"
 class FirebaseRepo {
 
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
+    val firebaseAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private val imageReferences = Firebase.storage.reference
     private val itemInfo = db.collection(Constants.ITEMS)
