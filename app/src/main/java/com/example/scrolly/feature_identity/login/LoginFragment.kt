@@ -20,6 +20,8 @@ import com.example.scrolly.main.SHARED_PREF_FILE
 import com.example.scrolly.main.STATE
 import com.example.scrolly.main.USER_ID
 import com.example.scrolly.util.RegisterValidation
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -29,6 +31,7 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val loginViewModel: LoginViewMode by activityViewModels()
     //private lateinit var progressDialog: ProgressDialog
+    //private lateinit var bottomNav: BottomNavigationView
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var sharedPref:SharedPreferences
@@ -36,6 +39,7 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         sharedPref= requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
 
@@ -54,8 +58,12 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         firebaseAuth= FirebaseAuth.getInstance()
         observers()
+
+     //  bottomNav=activity!!.findViewById(R.id.bottomNavView)
 
 
 
@@ -72,6 +80,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+      //  activity!!.findViewById<BottomAppBar>(R.id.bottomNavView)?.visibility=View.GONE
+         //bottomNav.visibility=View.GONE
 
 
 
@@ -208,7 +218,7 @@ class LoginFragment : Fragment() {
 
     fun showdialog(){
         val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(requireActivity())
-        builder.setTitle("Title")
+        builder.setTitle("Reset Password")
 
 // Set up the input
         val input = EditText(requireContext())
@@ -220,16 +230,23 @@ class LoginFragment : Fragment() {
 // Set up the buttons
         builder.setPositiveButton("Send Password", DialogInterface.OnClickListener { dialog, which ->
             // Here you get get input text from the Edittext
-            FirebaseAuth.getInstance().sendPasswordResetEmail(input.text.toString()).addOnCompleteListener {
-                if (it.isSuccessful)
-                {
-                    Toast.makeText(requireActivity(), "Password Sent Successfully", Toast.LENGTH_SHORT).show()
+            val email= input.text.toString()
+            if (email.isNotEmpty()){
+                FirebaseAuth.getInstance().sendPasswordResetEmail(input.text.toString()).addOnCompleteListener {
+                    if (it.isSuccessful)
+                    {
+                        Toast.makeText(requireActivity(), "Password Sent Successfully", Toast.LENGTH_SHORT).show()
+                    }
+                    else
+                    {
+                        Toast.makeText(requireActivity(), it.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
                 }
-                else
-                {
-                    Toast.makeText(requireActivity(), it.exception.toString(), Toast.LENGTH_SHORT).show()
-                }
+
+            }else {
+                Toast.makeText(requireActivity(), "You need to put your email first", Toast.LENGTH_SHORT).show()
             }
+
         })
         builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 

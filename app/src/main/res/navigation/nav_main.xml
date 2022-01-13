@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/timelineFragment">
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.example.scrolly.feature_addPost.AddPostFragment"
@@ -24,7 +24,11 @@
         android:id="@+id/timelineFragment"
         android:name="com.example.scrolly.feature_timeline.TimelineFragment"
         android:label="fragment_timeline"
-        tools:layout="@layout/fragment_timeline" />
+        tools:layout="@layout/fragment_timeline" >
+        <action
+            android:id="@+id/action_timelineFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
@@ -38,4 +42,9 @@
             android:id="@+id/action_loginFragment_to_timelineFragment"
             app:destination="@id/timelineFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.scrolly.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

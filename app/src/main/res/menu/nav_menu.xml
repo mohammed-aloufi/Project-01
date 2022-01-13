@@ -7,6 +7,9 @@
     <item android:title="Add Post"
         android:id="@+id/addPostFragment"
         android:icon="@drawable/ic_add_svg"/>
+    <item android:title="Profile"
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile_svg"/>
 <!--    <item android:title="Settings"-->
 <!--        android:id="@+id/thirdFragment"-->
 <!--        android:icon="@drawable/ic_profile_svg"/>-->

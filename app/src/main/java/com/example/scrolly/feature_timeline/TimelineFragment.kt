@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentTimelineBinding
 import com.example.scrolly.databinding.TimelineListItemBinding
 import com.example.scrolly.models.Post
@@ -33,6 +35,7 @@ class TimelineFragment : Fragment() {
         return binding.root
     }
 
+
     var t = false
     private inner class TimeLineViewHolder(val binding: TimelineListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -42,7 +45,12 @@ class TimelineFragment : Fragment() {
             binding.usernameTxtView.text = "test"
             binding.periodTxtView.text = "2 days ago"
             binding.likeCountTxtView.text = "22"
+            binding.likeImageBtn.setOnClickListener{
+                findNavController().navigate(R.id.action_timelineFragment_to_loginFragment)
+
+            }
             if (t) binding.postImgImgView.visibility = View.GONE
+
             else binding.postImgImgView.visibility = View.VISIBLE
             t = !t
         }
