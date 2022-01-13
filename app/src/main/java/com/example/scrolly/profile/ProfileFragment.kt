@@ -53,7 +53,7 @@ class ProfileFragment : Fragment() {
             Log.d(TAG, it.displayName.toString())
             binding.userIdTextView.text = it.displayName // username
             binding.emailTextView.text = it.email  // email address
-        }?: findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+        } ?: findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
 
 
         binding.logoutButton.setOnClickListener {

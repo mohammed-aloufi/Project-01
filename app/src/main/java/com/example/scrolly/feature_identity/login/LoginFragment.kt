@@ -36,14 +36,14 @@ class LoginFragment : Fragment() {
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var sharedPref:SharedPreferences
-
+    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
         sharedPref= requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
-
+        loadingDialog = setProgressDialog(requireContext(), "Loading..")
 
 //        if (sharedPref.getBoolean(STATE, false)){
 //            findNavController().navigate(R.id.action_loginFragment_to_timelineFragment)
@@ -91,12 +91,11 @@ class LoginFragment : Fragment() {
         }
 
         binding.loginButton.setOnClickListener {
-            val dialog = setProgressDialog(requireContext(), "Loading..")
             val emailAddress = binding.emailTextfield.editText?.text.toString()
             val password = binding.passwordTextfield.editText?.text.toString()
 
             if(emailAddress.isNotBlank() && password.isNotBlank()){
-                dialog.show()
+                loadingDialog.show()
                 loginViewModel.login(emailAddress,password)
             }
             else{
@@ -120,11 +119,11 @@ class LoginFragment : Fragment() {
     }
     fun observers(){
         loginViewModel.loginLiveData.observe(viewLifecycleOwner, {
-            val dialog = setProgressDialog(requireContext(), "Loading..")
+//            val dialog = setProgressDialog(requireContext(), "Loading..")
             it?.let {
                 val sharedPrefEdit = sharedPref.edit()
 
-                dialog.hide()
+//                dialog.dismiss()
                 Toast.makeText(requireActivity(), "login successfully", Toast.LENGTH_SHORT).show()
                 sharedPrefEdit.putBoolean(STATE, true)
                 sharedPrefEdit.putString(USER_ID,FirebaseAuth.getInstance().currentUser!!.uid)
@@ -137,9 +136,9 @@ class LoginFragment : Fragment() {
         })
 
         loginViewModel.loginErrorLiveData.observe(viewLifecycleOwner, {
-            val dialog = setProgressDialog(requireContext(), "Loading..")
+//            val dialog = setProgressDialog(requireContext(), "Loading..")
             it?.let {
-                dialog.hide()
+                loadingDialog.dismiss()
                 Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
                 loginViewModel.loginErrorLiveData.postValue(null)
             }
