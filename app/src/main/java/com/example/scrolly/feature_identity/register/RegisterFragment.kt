@@ -47,17 +47,20 @@ class RegisterFragment : Fragment() {
         }
 
         binding.registerButton.setOnClickListener {
+            val dialog = setProgressDialog(requireActivity(), "Loading..")
             val registerEmail = binding.rEmailTextfield.editText?.text.toString()
 
             val registerUsername = binding.rUsernameTextfield.editText?.text.toString()
             val registerPassword = binding.rPasswordTextfield.editText?.text.toString()
 
             if (registerPassword.isNotBlank()  && registerEmail.isNotBlank() && registerUsername.isNotBlank())  {
-                //dialog.show()
+
                 registerViewModel.signUp(registerEmail,registerPassword,registerUsername)
 
             }else{
+
                 checkFields(registerEmail,registerPassword,registerUsername)
+                dialog.dismiss()
             }
 
         }
