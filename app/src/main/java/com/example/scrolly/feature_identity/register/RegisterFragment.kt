@@ -10,16 +10,21 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentLoginBinding
 import com.example.scrolly.databinding.FragmentRegisterBinding
+import com.example.scrolly.util.RegisterValidation
 
 
 class RegisterFragment : Fragment() {
     private lateinit var binding:FragmentRegisterBinding
     private val registerViewModel:RegisterViewModel by activityViewModels()
+//    val dialog = setProgressDialog(requireContext(), "Loading..")
+    private val validator = RegisterValidation()
+
 
 
     override fun onCreateView(
@@ -27,7 +32,7 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val dialog = setProgressDialog(requireContext(), "Loading..")
+
 
         binding= FragmentRegisterBinding.inflate(inflater,container,false)
         return binding.root
@@ -35,6 +40,8 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+
         binding.goToLoginTextView.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
@@ -46,6 +53,7 @@ class RegisterFragment : Fragment() {
             val registerPassword = binding.rPasswordTextfield.editText?.text.toString()
 
             if (registerPassword.isNotBlank()  && registerEmail.isNotBlank() && registerUsername.isNotBlank())  {
+                //dialog.show()
                 registerViewModel.signUp(registerEmail,registerPassword,registerUsername)
 
             }else{
@@ -54,17 +62,20 @@ class RegisterFragment : Fragment() {
 
         }
 
-        registerViewModel.signUpLiveData.observe(viewLifecycleOwner,{
+        registerViewModel.registerLiveData.observe(viewLifecycleOwner,{
             it?.let{
+                //dialog.hide()
+
                 Toast.makeText(requireActivity(),"success" , Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-                registerViewModel.signUpLiveData.postValue(null)
+                registerViewModel.registerLiveData.postValue(null)
         }
         })
-        registerViewModel.signUpErrorLiveData.observe(viewLifecycleOwner,{
+        registerViewModel.registerErrorLiveData.observe(viewLifecycleOwner,{
             it?.let {
+                //dialog.hide()
                 Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
-                registerViewModel.signUpErrorLiveData.postValue(null)
+                registerViewModel.registerErrorLiveData.postValue(null)
             }
 
         })
@@ -73,6 +84,7 @@ class RegisterFragment : Fragment() {
 
 
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////
 
     fun setProgressDialog(context: Context, message:String): AlertDialog {
         val llPadding = 30
@@ -137,6 +149,7 @@ class RegisterFragment : Fragment() {
         // Get needed string messages from strings.xml resource
         val require = getString(R.string.require)
         val wrongEmailFormat = getString(R.string.emailcheck)
+        val passwordConditions=getString(R.string.passCondition)
 
         if (fullName.isBlank()) {
             fullNameLayout.error = require
@@ -145,19 +158,19 @@ class RegisterFragment : Fragment() {
 
         if (email.isBlank()) {
             emailLayout.error = require
-            state = false}
-//        } else if (!validator.emailIsValid(email)) {
-//            emailLayout.error = wrongEmailFormat
-//            state = false
-//        }
+            state = false
+        } else if (!validator.emailIsValid(email)) {
+            emailLayout.error = wrongEmailFormat
+            state = false
+        }
 
         if (password.isBlank()) {
             passwordLayout.error = require
-            state = false}
-//        } else if (!validator.passIsValid(password)) {
-//            passwordLayout.error = passwordConditions
-//            state = false
-//        }
+            state = false
+        } else if (!validator.passIsValid(password)) {
+            passwordLayout.error = passwordConditions
+            state = false
+        }
 
 
         return state

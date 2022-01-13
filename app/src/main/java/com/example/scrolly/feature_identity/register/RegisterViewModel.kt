@@ -16,11 +16,11 @@ class RegisterViewModel:ViewModel() {
 
     private val firebaseRepo = FirebaseRepo.get()
 
-    val signUpLiveData = MutableLiveData<String>()
-    val signUpErrorLiveData = MutableLiveData<String>()
+    val registerLiveData = MutableLiveData<String>()
+    val registerErrorLiveData = MutableLiveData<String>()
 
 
-    fun signUp(email:String, password: String, fullname: String) {
+    fun signUp(email:String, password: String, display: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -28,32 +28,35 @@ class RegisterViewModel:ViewModel() {
 
                 response.addOnCompleteListener {
                     if (it.isSuccessful) {
-                        insertUserInfo(fullname)
+                        adddDisplayName(display)
                     }else{
-                        signUpErrorLiveData.postValue(response.exception!!.message)
+                        registerErrorLiveData.postValue(response.exception!!.message)
                     }
                 }
             } catch (e: Exception) {
                 Log.d(TAG, "Catch: ${e.message}")
-                signUpErrorLiveData.postValue(e.message)
+                registerErrorLiveData.postValue(e.message)
             }
         }
     }
-    private fun insertUserInfo(fullname:String) {
+
+
+    ////////////
+    private fun adddDisplayName(displayName:String) {
 
 
         val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName(fullname)
+            .setDisplayName(displayName)
             .build()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 firebaseRepo.firebaseAuth.currentUser?.updateProfile(profileUpdates)
 
-                signUpLiveData.postValue("Success")
+                registerLiveData.postValue("Success")
 
             } catch(e: Exception) {
-                signUpErrorLiveData.postValue(e.message)
+                registerErrorLiveData.postValue(e.message)
 
             }
         }

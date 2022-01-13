@@ -16,5 +16,7 @@
     <string name="register1">Already a member? Login</string>
     <string name="forgot">Forgot Your Password?</string>
     <string name="require">Required!</string>
-    <string name="emailcheck">your email is not correct</string>
+    <string name="emailcheck">incorrect email format.eg:test@test.com</string>
+    <string name="passCondition">Your password should contain at least 8 characters and \n at least 3 of the following: uppercase, lowercase, or special characters</string>
+
 </resources>

@@ -2,19 +2,20 @@ package com.example.scrolly.feature_identity.login
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputType
 import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentLoginBinding
+import com.example.scrolly.util.RegisterValidation
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -24,6 +25,7 @@ class LoginFragment : Fragment() {
     //private lateinit var progressDialog: ProgressDialog
 
     private lateinit var firebaseAuth: FirebaseAuth
+//
 
 
     override fun onCreateView(
@@ -32,7 +34,7 @@ class LoginFragment : Fragment() {
     ): View? {
         firebaseAuth = FirebaseAuth.getInstance()
 
-        val dialog = setProgressDialog(requireContext(), "Loading..")
+
 
         binding= FragmentLoginBinding.inflate(inflater,container,false)
         return binding.root
@@ -41,22 +43,34 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
 
         binding.goToRegisTextView.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
         binding.loginButton.setOnClickListener {
+            val dialog = setProgressDialog(requireContext(), "Loading..")
             val emailAddress = binding.emailTextfield.editText?.text.toString()
             val password = binding.passwordTextfield.editText?.text.toString()
 
             if(emailAddress.isNotBlank() && password.isNotBlank()){
+                dialog.show()
                 loginViewModel.login(emailAddress,password)
             }
             else{
                 checkFields(emailAddress,password)
 
             }
+        }
+
+
+
+
+
+        binding.goToRegisTextView2.setOnClickListener {
+
+           showdialog()
         }
 
         loginViewModel.loginLiveData.observe(viewLifecycleOwner, { email ->
@@ -156,5 +170,35 @@ class LoginFragment : Fragment() {
 
 
         return state
+    }
+
+    fun showdialog(){
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(requireActivity())
+        builder.setTitle("Title")
+
+// Set up the input
+        val input = EditText(requireContext())
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setHint("Enter you email")
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+// Set up the buttons
+        builder.setPositiveButton("Send Password", DialogInterface.OnClickListener { dialog, which ->
+            // Here you get get input text from the Edittext
+            FirebaseAuth.getInstance().sendPasswordResetEmail(input.text.toString()).addOnCompleteListener {
+                if (it.isSuccessful)
+                {
+                    Toast.makeText(requireActivity(), "Password Sent Successfully", Toast.LENGTH_SHORT).show()
+                }
+                else
+                {
+                    Toast.makeText(requireActivity(), it.exception.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+
+        builder.show()
     }
 }
