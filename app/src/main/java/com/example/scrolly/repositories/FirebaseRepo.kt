@@ -3,6 +3,7 @@ package com.example.scrolly.repositories
 import android.content.Context
 import android.net.Uri
 import com.example.scrolly.models.Post
+import com.example.scrolly.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -10,7 +11,7 @@ import com.google.firebase.storage.ktx.storage
 
 
 
-private const val ITEMS = "items"
+
 private const val TAG = "FirebaseRepo"
 class FirebaseRepo {
 
@@ -18,7 +19,7 @@ class FirebaseRepo {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private val imageReferences = Firebase.storage.reference
-    private val itemInfo = db.collection(ITEMS)
+    private val itemInfo = db.collection(Constants.ITEMS)
 
 
     // Register with new member
