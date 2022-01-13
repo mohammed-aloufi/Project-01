@@ -1,12 +1,13 @@
 ![Image of Tuwaiq](https://camo.githubusercontent.com/37ca472e2afb74974a0314d89af8f470422a79582bed0d188f9927777230195d/68747470733a2f2f6c61756e63682e73612f6173736574732f696d616765732f6c6f676f732f7475776169712d61636164656d792d6c6f676f2e737667)
 # FINAL CAPSTONE
-Tuwaiq Academy final Project.
-ComicToon Android Application using Kotlin
+.
+Scrolly Android Application using Kotlin
 ## Overview:
-![Image of app logo](https://g.top4top.io/p_2195pgt901.png)
+![Image of app logo](https://b.top4top.io/p_2204its031.png)
 
 
-This project represents an android application **ComicToon**,that allows comic readers to view famous classic comics, particularly from the 1990s. including each comic book's details
+This project represents an android application **Scrolly**,that allows user to express their thoughts and ideas with each other.It's more like a social media app.
+
 ## Technologies used:
 This application was built using the following technologies:
 ### For Designing the logo of the app:
