@@ -28,5 +28,16 @@
     <string name="arabic">Arabic</string>
     <string name="english">English</string>
     <string name="logout">Logout</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="logot_notice">Logout Notice</string>
+    <string name="delete_message">You are about to logout from your account \n Are you sure?</string>
+    <string name="RegisterPage">Register</string>
+    <string name="mainpage">Main</string>
+    <string name="main">Main</string>
+    <string name="Profiles">Profile</string>
+    <string name="home">Home</string>
+    <string name="add">Add Post</string>
+    <string name="Profile">Profile</string>
 
 </resources>

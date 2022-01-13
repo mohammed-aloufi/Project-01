@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Scrolly</string>
+    <string name="like_btn_desc">أعجاب بهذا البوست</string>
+    <string name="comment_txtView_label">تعليق</string>
+    <string name="comments_btn_desc">التعليقات</string>
+    <string name="email">الايميل الشخصي</string>
+    <string name="password">كلمة المرور</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="New">جديد هنا؟ سجّل</string>
+    <string name="Register">التسجيل</string>
+    <string name="Username">اسم المستخدم</string>
+    <string name="register">التسجيل</string>
+    <string name="register1">مسجل بالفعل؟ تسجيل الدخول</string>
+    <string name="new_post_txt_hint">ماالذي يدور بذهنك</string>
+    <string name="send_btn_label">ارسال</string>
+    <string name="cancel_btn_desc">الغاء</string>
+    <string name="upload_an_image_btn_desc">تحميل صورة</string>
+    <string name="forgot">نسيت كلمة المرور؟</string>
+    <string name="require">مطلوب</string>
+    <string name="emailcheck">الايميل مكتوب بشكل خاطئ</string>
+    <string name="passCondition">"كلمة المرور يجب ان تحتوي على 8 احرف على الاقل "</string>
+    <string name="clickagain">اضغط للخلف مرة أخرى للخروج</string>
+    <string name="Welcome">"أهلا بك "</string>
+    <string name="languagepref">تفضيلات اللغة</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الانجليزية</string>
+    <string name="logout">تسجيل الخروج</string>
+    <string name="no">لا</string>
+    <string name="yes">نعم</string>
+    <string name="logot_notice">تسجيل الخروج</string>
+    <string name="delete_message">أنت على وشك تسجيل الخروج هل أنت متاكد؟</string>
+    <string name="RegisterPage">التسجيل</string>
+    <string name="mainpage">الرئيسية</string>
+    <string name="main">الرئيسية</string>
+    <string name="Profiles">الملف الشخصي</string>
+    <string name="home">الرئيسية</string>
+    <string name="add">أضف منشور</string>
+    <string name="Profile">الملف الشخصي</string>
+</resources>
