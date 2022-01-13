@@ -81,7 +81,6 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
 
     // for animation
-
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // for language
