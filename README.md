@@ -50,7 +50,7 @@ Follow the steps below to get started with the project's development environment
 1. Install Android Studio from [Android Studio](https://developer.android.com/studio?gclid=Cj0KCQjw5oiMBhDtARIsAJi0qk2WOPjxp2Wij5sgO3bAK6Rp18zrs4Y0L5S6W89Fk7OClhAiVuNr1mgaAsT-EALw_wcB&gclsrc=aw.ds)
 2. Clone this repository:
  ```kotlin 
- $ git clone https://github.com/WalaaAlshaikh/ComicToon.git
+ $ git clone https://github.com/mohammed-aloufi/Project-01.git
  ```
 3. Navigate to the project directory:
  ```kotlin 
@@ -144,35 +144,32 @@ Thirdly,We designed the screens each of them suitable for a specific action usin
 As for the obstacles that we faced,first we needed to decide the nature of the error (if it's syntax, runtime or logical), and then find the solution accordingly.Such solutions that can be disovered when debugging the error, using (Log.d)to specifty the location of the error, searching for similar cases online in [stackoverflow](https://stackoverflow.com/) and asking for the help of the experts.
 
 ## Unsolved Problems which would be fixed in future iterations:
-* The issue of playing\puasing videos in VideoView, which can potentially be solved by adding some functions to add the action bar for videos.
+* The issue of adding more than one picture in the post.
+* completing on working on comments functionality
 * Some conflects in ui regarding Localization (when switching from English into Arabic).
 * some minor issues regarding the enhancment of the design to make the user expereince more dynamic.
 
-## My favorite functions work:
-* video View
-to display video url (.mp4)
+## one of our favorite functions work:
+* Localization
+to switch from englidh into arabic
  
  ```kotlin
-// in class.kt file
-var video:VideoView=view.findViewById(R.id.videoView)
- var mediaControls: MediaController? = null
-        if (mediaControls == null) {
-           //  creating an object of media controller class
-            mediaControls = MediaController(context)
-
-            // set the anchor view for the video view
-            mediaControls.setAnchorView(video)
-         video.setMediaController(mediaControls)
-        video.setVideoURI(
-              Uri.parse(item.highUrl))
-           video.requestFocus()
-           video.start()
-        }
+// in MainActivity.kt file
+ private val localizationDelegate = LocalizationActivityDelegate(this)
         
- // in xml file
- <VideoView
-  //...//
-            />
+ // in fragment file
+ val localizationDelegate = LocalizationActivityDelegate(requireActivity())
+
+        // set the language into Arabic when clicking on it
+        binding.acivBotton.setOnClickListener {
+            localizationDelegate.setLanguage(requireContext(),"ar")
+
+        }
+        // set the language into English when clicking on it
+        binding.engButton.setOnClickListener{
+            localizationDelegate.setLanguage(requireContext(),"en")
+
+        }
 ```            
 * using Meta (facebook) library for animation
  an Android library that provides an easy way to add a shimmer effect to any view in your Android app. It is useful as an unobtrusive loading indicator that was originally developed for Facebook Home.
