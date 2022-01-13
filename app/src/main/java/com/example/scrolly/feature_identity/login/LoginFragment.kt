@@ -35,14 +35,14 @@ class LoginFragment : Fragment() {
     //private lateinit var bottomNav: BottomNavigationView
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var sharedPref:SharedPreferences
+    private lateinit var sharedPref: SharedPreferences
     private lateinit var loadingDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        sharedPref= requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
+        sharedPref = requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
         loadingDialog = setProgressDialog(requireContext(), "Loading..")
 
 //        if (sharedPref.getBoolean(STATE, false)){
@@ -61,11 +61,10 @@ class LoginFragment : Fragment() {
     ): View? {
 
 
-        firebaseAuth= FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
         observers()
 
-     //  bottomNav=activity!!.findViewById(R.id.bottomNavView)
-
+        //  bottomNav=activity!!.findViewById(R.id.bottomNavView)
 
 
 //      if(firebaseAuth.currentUser?.uid.isNullOrBlank()){
@@ -73,7 +72,7 @@ class LoginFragment : Fragment() {
 //
 //      }
 
-        binding= FragmentLoginBinding.inflate(inflater,container,false)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -81,9 +80,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
-      //  activity!!.findViewById<BottomAppBar>(R.id.bottomNavView)?.visibility=View.GONE
-         //bottomNav.visibility=View.GONE
-
+        //  activity!!.findViewById<BottomAppBar>(R.id.bottomNavView)?.visibility=View.GONE
+        //bottomNav.visibility=View.GONE
 
 
         binding.goToRegisTextView.setOnClickListener {
@@ -94,12 +92,11 @@ class LoginFragment : Fragment() {
             val emailAddress = binding.emailTextfield.editText?.text.toString()
             val password = binding.passwordTextfield.editText?.text.toString()
 
-            if(emailAddress.isNotBlank() && password.isNotBlank()){
+            if (emailAddress.isNotBlank() && password.isNotBlank()) {
                 loadingDialog.show()
-                loginViewModel.login(emailAddress,password)
-            }
-            else{
-                checkFields(emailAddress,password)
+                loginViewModel.login(emailAddress, password)
+            } else {
+                checkFields(emailAddress, password)
 
             }
         }
@@ -110,33 +107,30 @@ class LoginFragment : Fragment() {
 
         binding.goToRegisTextView2.setOnClickListener {
 
-           showdialog()
+            showdialog()
         }
 
 
-
-
     }
-    fun observers(){
+
+    fun observers() {
         loginViewModel.loginLiveData.observe(viewLifecycleOwner, {
-//            val dialog = setProgressDialog(requireContext(), "Loading..")
             it?.let {
                 val sharedPrefEdit = sharedPref.edit()
-
-//                dialog.dismiss()
                 Toast.makeText(requireActivity(), "login successfully", Toast.LENGTH_SHORT).show()
                 sharedPrefEdit.putBoolean(STATE, true)
-                sharedPrefEdit.putString(USER_ID,FirebaseAuth.getInstance().currentUser!!.uid)
+                sharedPrefEdit.putString(USER_ID, FirebaseAuth.getInstance().currentUser!!.uid)
                 sharedPrefEdit.commit()
                 loginViewModel.loginLiveData.postValue(null)
                 //checkLoggedInState()
+                loadingDialog.dismiss()
                 findNavController().navigate(R.id.action_loginFragment_to_timelineFragment)
 
             }
         })
 
         loginViewModel.loginErrorLiveData.observe(viewLifecycleOwner, {
-//            val dialog = setProgressDialog(requireContext(), "Loading..")
+
             it?.let {
                 loadingDialog.dismiss()
                 Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
@@ -146,7 +140,7 @@ class LoginFragment : Fragment() {
 
     }
 
-    fun setProgressDialog(context: Context, message:String): AlertDialog {
+    fun setProgressDialog(context: Context, message: String): AlertDialog {
         val llPadding = 30
         val ll = LinearLayout(context)
         ll.orientation = LinearLayout.HORIZONTAL
@@ -154,7 +148,8 @@ class LoginFragment : Fragment() {
         ll.gravity = Gravity.CENTER
         var llParam = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT)
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         llParam.gravity = Gravity.CENTER
         ll.layoutParams = llParam
 
@@ -165,7 +160,8 @@ class LoginFragment : Fragment() {
 
         llParam = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         llParam.gravity = Gravity.CENTER
         val tvText = TextView(context)
         tvText.text = message
@@ -191,6 +187,7 @@ class LoginFragment : Fragment() {
         }
         return dialog
     }
+
     private fun checkFields(
         email: String,
         password: String,
@@ -220,8 +217,9 @@ class LoginFragment : Fragment() {
         return state
     }
 
-    fun showdialog(){
-        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(requireActivity())
+    fun showdialog() {
+        val builder: android.app.AlertDialog.Builder =
+            android.app.AlertDialog.Builder(requireActivity())
         builder.setTitle("Reset Password")
 
 // Set up the input
@@ -232,27 +230,41 @@ class LoginFragment : Fragment() {
         builder.setView(input)
 
 // Set up the buttons
-        builder.setPositiveButton("Send Password", DialogInterface.OnClickListener { dialog, which ->
-            // Here you get get input text from the Edittext
-            val email= input.text.toString()
-            if (email.isNotEmpty()){
-                FirebaseAuth.getInstance().sendPasswordResetEmail(input.text.toString()).addOnCompleteListener {
-                    if (it.isSuccessful)
-                    {
-                        Toast.makeText(requireActivity(), "Password Sent Successfully", Toast.LENGTH_SHORT).show()
-                    }
-                    else
-                    {
-                        Toast.makeText(requireActivity(), it.exception.toString(), Toast.LENGTH_SHORT).show()
-                    }
+        builder.setPositiveButton(
+            "Send Password",
+            DialogInterface.OnClickListener { dialog, which ->
+                // Here you get get input text from the Edittext
+                val email = input.text.toString()
+                if (email.isNotEmpty()) {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(input.text.toString())
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Toast.makeText(
+                                    requireActivity(),
+                                    "Password Sent Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    requireActivity(),
+                                    it.exception.toString(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                } else {
+                    Toast.makeText(
+                        requireActivity(),
+                        "You need to put your email first",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
-            }else {
-                Toast.makeText(requireActivity(), "You need to put your email first", Toast.LENGTH_SHORT).show()
-            }
-
-        })
-        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+            })
+        builder.setNegativeButton(
+            "Cancel",
+            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 
         builder.show()
     }
