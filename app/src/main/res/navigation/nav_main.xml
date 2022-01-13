@@ -6,9 +6,10 @@
     app:startDestination="@id/registerFragment">
     <fragment
         android:id="@+id/addPostFragment"
-        android:name="com.example.scrolly.feature_addpost.AddPostFragment"
+        android:name="com.example.scrolly.feature_addPost.AddPostFragment"
         android:label="fragment_add_post"
         tools:layout="@layout/fragment_add_post" />
+
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.scrolly.feature_identity.register.RegisterFragment"
@@ -18,11 +19,13 @@
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/timelineFragment"
         android:name="com.example.scrolly.feature_timeline.TimelineFragment"
         android:label="fragment_timeline"
         tools:layout="@layout/fragment_timeline" />
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.scrolly.feature_identity.login.LoginFragment"

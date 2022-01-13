@@ -14,6 +14,10 @@
     <string name="confirmPass">Confirm Password</string>
     <string name="register">Register</string>
     <string name="register1">Already a member? Login</string>
+    <string name="new_post_txt_hint">What\'s on your mind?</string>
+    <string name="send_btn_label">Send</string>
+    <string name="cancel_btn_desc">cancel</string>
+    <string name="upload_an_image_btn_desc">upload an image</string>
     <string name="forgot">Forgot Your Password?</string>
     <string name="require">Required!</string>
     <string name="emailcheck">incorrect email format.eg:test@test.com</string>
