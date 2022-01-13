@@ -3,6 +3,7 @@ package com.example.scrolly.feature_identity.login
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
@@ -15,6 +16,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentLoginBinding
+import com.example.scrolly.main.SHARED_PREF_FILE
+import com.example.scrolly.main.STATE
 import com.example.scrolly.util.RegisterValidation
 import com.google.firebase.auth.FirebaseAuth
 
@@ -25,6 +28,8 @@ class LoginFragment : Fragment() {
     //private lateinit var progressDialog: ProgressDialog
 
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var sharedPref:SharedPreferences
+
 //
 
 
@@ -33,8 +38,10 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         firebaseAuth = FirebaseAuth.getInstance()
+//        sharedPref= requireActivity().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
+//        if (sharedPref.getBoolean(STATE, false))
 
-
+      //  if(FirebaseAuth.)
 
         binding= FragmentLoginBinding.inflate(inflater,container,false)
         return binding.root
@@ -73,13 +80,12 @@ class LoginFragment : Fragment() {
            showdialog()
         }
 
-        loginViewModel.loginLiveData.observe(viewLifecycleOwner, { email ->
-            email?.let {
+        loginViewModel.loginLiveData.observe(viewLifecycleOwner, {
+            val dialog = setProgressDialog(requireContext(), "Loading..")
+            it?.let {
 
-                //progressDialog.dismiss()
+                dialog.hide()
                 Toast.makeText(requireActivity(), "login successfully", Toast.LENGTH_SHORT).show()
-
-
                 loginViewModel.loginLiveData.postValue(null)
                 //checkLoggedInState()
                 findNavController().navigate(R.id.action_loginFragment_to_timelineFragment)
