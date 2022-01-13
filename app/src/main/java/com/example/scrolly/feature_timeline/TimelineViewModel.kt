@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scrolly.models.Post
+import com.example.scrolly.models.User
 import com.example.scrolly.repositories.FirebaseRepo
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
@@ -13,8 +14,11 @@ import kotlinx.coroutines.launch
 class TimelineViewModel: ViewModel() {
 
     private val firebaseRepo = FirebaseRepo.get()
-
     fun getPosts(): LiveData<List<Post>>{
         return firebaseRepo.getPosts()
+    }
+
+    fun getUserInfo(id: String): User {
+        return firebaseRepo.getUserInfo(id)
     }
 }

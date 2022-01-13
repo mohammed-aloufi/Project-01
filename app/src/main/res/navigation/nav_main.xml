@@ -8,7 +8,11 @@
         android:id="@+id/addPostFragment"
         android:name="com.example.scrolly.feature_addPost.AddPostFragment"
         android:label="fragment_add_post"
-        tools:layout="@layout/fragment_add_post" />
+        tools:layout="@layout/fragment_add_post" >
+        <action
+            android:id="@+id/action_addPostFragment_to_timelineFragment"
+            app:destination="@id/timelineFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/registerFragment"

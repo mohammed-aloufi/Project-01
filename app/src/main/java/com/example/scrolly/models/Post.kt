@@ -7,5 +7,6 @@ data class Post(
     var postMessage: String? = null,
     val postImageUrl: String? = null,
     val likes: Int = 0,
-    val timestamp: Long? = Date().time
+    val timestamp: Long? = Date().time,
+    val userId: String = ""
 )

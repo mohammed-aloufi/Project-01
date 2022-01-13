@@ -41,6 +41,43 @@ class FirebaseRepo {
     // Create User Profile
     fun createProfile(user: User) = usersCollectionRef.document(user.id).set(user)
 
+    fun getUserInfo(id: String): User {
+        var user = User()
+         usersCollectionRef.document(id).get().addOnSuccessListener {
+             user = it.toObject(User::class.java)!!
+        }
+
+        return user
+    }
+    suspend fun uploadProfileImage(userId: String, uri: Uri){
+        val date = Date()
+        val dateFormat = "dd-MMM-yyyy-hh:mm:ss"
+        val dateString = android.text.format.DateFormat.format(dateFormat, date)
+        val filename = "img_$dateString.jpg"
+        val ref = storageRef.child("images/$filename")
+        val uploadTask = ref.putFile(uri)
+
+        val urlTask = uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            ref.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                //TODO: there is a bug here where uid isn't okey
+                postsCollectionRef.document(userId).update("profileImgUrl", downloadUri.toString())
+                Log.d(TAG, "uploadProfileImage: $downloadUri")
+                Log.d(TAG, "uploadProfileImage: ${firebaseAuth.currentUser?.uid.toString()}")
+                Log.d(TAG, "uploadProfileImage: ")
+            } else {
+                throw IllegalStateException("uploadImage(): Failed getting download url")
+            }
+        }.await()
+    }
+
     // Login with current user (signIn)
     fun signIn(email: String, password: String) =
         firebaseAuth.signInWithEmailAndPassword(email, password)

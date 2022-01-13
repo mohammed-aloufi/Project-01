@@ -13,6 +13,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentAddPostBinding
 import com.example.scrolly.models.Post
 import com.example.scrolly.utils.showSnackBar
@@ -88,6 +90,7 @@ class AddPostFragment : Fragment(), View.OnClickListener {
                         if (isSuccessful){
                             binding.progressBar.visibility = View.GONE
                             showSnackBar(requireView(), "Success", true)
+                            findNavController().navigate(R.id.action_addPostFragment_to_timelineFragment)
                         }else{
                             binding.progressBar.visibility = View.GONE
                             showSnackBar(requireView(), "Unable to upload post.", true)

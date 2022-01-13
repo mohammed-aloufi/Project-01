@@ -9,7 +9,7 @@
     tools:context=".profile.ProfileFragment">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profileImgView"
         android:layout_width="410dp"
         android:layout_height="201dp"
         android:scaleType="centerCrop"
@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/profileImgView" />
 
     <TextView
         android:id="@+id/textView4"
@@ -136,9 +136,25 @@
     </RadioGroup>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/saveChangesBtn"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/strikeshape"
+        android:text="@string/save_changes_btn"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/profileImgView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.946"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/logout_button"
         android:layout_width="114dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/strikeshape"
         android:text="@string/logout"
         android:textColor="@color/white"
@@ -146,7 +162,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-        app:layout_constraintVertical_bias="0.525" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
