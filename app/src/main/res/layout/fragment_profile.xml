@@ -8,17 +8,38 @@
     android:background="@drawable/profile"
     tools:context=".profile.ProfileFragment">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:backgroundTint="@android:color/transparent"
+            app:shimmer_clip_to_children="true"
+            app:shimmer_colored="false"
+            app:shimmer_highlight_color="@android:color/transparent"
+            app:shimmer_intensity="20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/profileHolderImgView"
+                android:layout_width="410dp"
+                android:layout_height="201dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
     <ImageView
         android:id="@+id/profileImgView"
         android:layout_width="410dp"
         android:layout_height="201dp"
+        android:visibility="invisible"
         android:scaleType="centerCrop"
-        android:src="@drawable/imageprogile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/imageprogile" />
-
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -130,6 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/black"
+            android:checked="true"
             android:fontFamily="@font/nunito_bold"
             android:text="@string/english"
             android:textColorLink="#000000" />

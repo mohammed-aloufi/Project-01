@@ -14,17 +14,23 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
+import com.bumptech.glide.Glide
 import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
 
 private const val TAG = "ProfileFragment"
+
 class ProfileFragment : Fragment() {
-    private lateinit var binding:FragmentProfileBinding
+    private lateinit var binding: FragmentProfileBinding
     private val profileViewModel by activityViewModels<ProfileViewModel>()
 
     private val getPermissionLauncher = registerForActivityResult(
@@ -47,7 +53,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding= FragmentProfileBinding.inflate(inflater,container,false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -60,12 +66,24 @@ class ProfileFragment : Fragment() {
 
         // set the language into Arabic when clicking on it
         binding.acivBotton.setOnClickListener {
-            localizationDelegate.setLanguage(requireContext(),"ar")
+            localizationDelegate.setLanguage(requireContext(), "ar")
 
         }
         // set the language into English when clicking on it
-        binding.engButton.setOnClickListener{
-            localizationDelegate.setLanguage(requireContext(),"en")
+        binding.engButton.setOnClickListener {
+            localizationDelegate.setLanguage(requireContext(), "en")
+
+        }
+//        binding.shimmerViewContainer.startShimmer()
+//        binding.shimmerViewContainer.stopShimmer()
+//        binding.shimmerViewContainer.visibility = View.GONE
+        binding.profileImgView.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            val user = profileViewModel.getUserInfo(FirebaseAuth.getInstance().currentUser!!.uid)
+            binding.profileImgView.load(user?.profileImgUrl) {
+                placeholder(R.drawable.ic_launcher_foreground)
+                crossfade(250)
+            }
 
         }
 
@@ -91,11 +109,12 @@ class ProfileFragment : Fragment() {
             }
         }
         binding.saveChangesBtn.setOnClickListener {
-            profileViewModel.uploadProfileImage(FirebaseAuth.getInstance().currentUser?.uid!!, profileViewModel.imageUri!!)
+            profileViewModel.uploadProfileImage(profileViewModel.imageUri!!)
+            Log.d(TAG, "onViewCreated: ${FirebaseAuth.getInstance().currentUser?.uid!!}")
         }
     }
 
-    private fun showAlert(){
+    private fun showAlert() {
         /** pop up warning window for confirmation of logging out from account
          * if it's logged out, it will move to login page*/
 

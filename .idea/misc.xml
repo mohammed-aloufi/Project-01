@@ -13,14 +13,15 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21296296296296297" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_add_post.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_timeline.xml" value="0.30512820512820515" />
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.21296296296296297" />
         <entry key="app/src/main/res/layout/home_test.xml" value="0.30512820512820515" />
         <entry key="app/src/main/res/layout/post_list_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/post_list_item_test.xml" value="0.5" />
         <entry key="app/src/main/res/layout/test.xml" value="0.21296296296296297" />
-        <entry key="app/src/main/res/layout/timeline_list_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/timeline_list_item.xml" value="0.48044692737430167" />
         <entry key="app/src/main/res/menu/nav_menu.xml" value="0.3098958333333333" />
       </map>
     </option>

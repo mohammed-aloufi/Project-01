@@ -10,6 +10,7 @@
     <string name="New">جديد هنا؟ سجّل</string>
     <string name="Register">التسجيل</string>
     <string name="Username">اسم المستخدم</string>
+    <string name="confirmPass">تأكيد كلمة المرور</string>
     <string name="register">التسجيل</string>
     <string name="register1">مسجل بالفعل؟ تسجيل الدخول</string>
     <string name="new_post_txt_hint">ماالذي يدور بذهنك</string>
@@ -37,4 +38,9 @@
     <string name="home">الرئيسية</string>
     <string name="add">أضف منشور</string>
     <string name="Profile">الملف الشخصي</string>
+    <string name="save_changes_btn">حفظ</string>
+    <string name="success">تم</string>
+    <string name="upload_post_error_msg">تعذر الارسال</string>
+    <string name="login_to_use_msg">الرجاء تسجيل الدخول</string>
+
 </resources>

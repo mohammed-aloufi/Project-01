@@ -1,8 +1,8 @@
 package com.example.scrolly.utils
 
 object Constants {
-    const val POST = "posts"
-    const val USER = "users"
+    const val POSTS = "posts"
+    const val USERS = "users"
     const val IMAGE_URI_KEY = "imageUri"
     const val SECOND_MILLIS = 1000;
     const val MINUTE_MILLIS = 60 * SECOND_MILLIS;

@@ -3,6 +3,7 @@ package com.example.scrolly.profile
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scrolly.models.User
 import com.example.scrolly.repositories.FirebaseRepo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,9 +17,12 @@ class ProfileViewModel: ViewModel() {
         return FirebaseAuth.getInstance().currentUser
     }
 
-    fun uploadProfileImage(userId: String, uri: Uri){
+    fun uploadProfileImage(uri: Uri){
         viewModelScope.launch {
-            firebaseRepo.uploadProfileImage(userId, uri)
+            firebaseRepo.uploadProfileImage(uri)
         }
+    }
+    suspend fun getUserInfo(id: String): User? {
+        return firebaseRepo.getUserInfo(id)
     }
 }
