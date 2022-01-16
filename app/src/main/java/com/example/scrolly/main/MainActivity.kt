@@ -25,39 +25,31 @@ import java.util.*
 private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() ,OnLocaleChangedListener{
+
     private lateinit var binding:ActivityMainBinding
-
     private val localizationDelegate = LocalizationActivityDelegate(this)
-
+    private lateinit var navController: NavController
 
     companion object {
         lateinit var instance:  MainActivity
     }
 
-    private lateinit var navController: NavController
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding= ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         instance=this
         // for localization
         localizationDelegate.addOnLocaleChangedListener(this)
         localizationDelegate.onCreate()
 
-
-        binding= ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-//
         val navHostFragment=supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-
         navController=navHostFragment.navController
         setupActionBarWithNavController(navController)
 
         NavigationUI.setupWithNavController(binding.bottomNavView,navController)
 
-        Log.d(TAG,"this is the destiny ${navController.currentDestination.toString()}")
-
-//        val navController = binding.bottomNavView
-//        navController.setupWithNavController(findNavController(R.id.fragmentContainerView))
         navController.addOnDestinationChangedListener{_,destenation,_ ->
             when(destenation.id){
                 R.id.loginFragment -> binding.bottomNavView.visibility= View.GONE
@@ -66,10 +58,6 @@ class MainActivity : AppCompatActivity() ,OnLocaleChangedListener{
                 else -> binding.bottomNavView.visibility= View.VISIBLE
             }
         }
-
-
-
-
 
     }
 

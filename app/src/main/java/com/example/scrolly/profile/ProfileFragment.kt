@@ -2,7 +2,6 @@ package com.example.scrolly.profile
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -14,18 +13,26 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
+import com.bumptech.glide.Glide
 import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentProfileBinding
+import com.example.scrolly.models.User
+import com.example.scrolly.utils.showSnackBar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
 
 private const val TAG = "ProfileFragment"
+
 class ProfileFragment : Fragment() {
-    private lateinit var binding:FragmentProfileBinding
+    private lateinit var binding: FragmentProfileBinding
     private val profileViewModel by activityViewModels<ProfileViewModel>()
+
+    private var user: User? = null
 
     private val getPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -37,9 +44,14 @@ class ProfileFragment : Fragment() {
     ) { imageUri ->
         imageUri?.let {
             profileViewModel.imageUri = imageUri
-            updatePostImgUI()
+            updateProfileImgUI()
             binding.saveChangesBtn.visibility = View.VISIBLE
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+            getUserProfileImage()
     }
 
     override fun onCreateView(
@@ -47,7 +59,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding= FragmentProfileBinding.inflate(inflater,container,false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -60,14 +72,19 @@ class ProfileFragment : Fragment() {
 
         // set the language into Arabic when clicking on it
         binding.acivBotton.setOnClickListener {
-            localizationDelegate.setLanguage(requireContext(),"ar")
+            localizationDelegate.setLanguage(requireContext(), "ar")
 
         }
         // set the language into English when clicking on it
-        binding.engButton.setOnClickListener{
-            localizationDelegate.setLanguage(requireContext(),"en")
+        binding.engButton.setOnClickListener {
+            localizationDelegate.setLanguage(requireContext(), "en")
 
         }
+//        binding.shimmerViewContainer.startShimmer()
+//        binding.shimmerViewContainer.stopShimmer()
+//        binding.shimmerViewContainer.visibility = View.GONE
+        binding.profileImgView.visibility = View.VISIBLE
+
 
         profileViewModel.getUser()?.let {
             Log.d(TAG, it.displayName.toString())
@@ -90,12 +107,39 @@ class ProfileFragment : Fragment() {
                 openGalleryLauncher.launch("image/*")
             }
         }
-//        binding.saveChangesBtn.setOnClickListener {
-//            profileViewModel.uploadProfileImage(FirebaseAuth.getInstance().currentUser?.uid!!, profileViewModel.imageUri!!)
-//        }
+        binding.saveChangesBtn.setOnClickListener {
+            binding.progressBar3.visibility = View.VISIBLE
+            lifecycleScope.launch {
+                var isSuccess = profileViewModel.uploadProfileImage(profileViewModel.imageUri!!)
+                if (isSuccess) {
+                    binding.progressBar3.visibility = View.GONE
+                    getUserProfileImage()
+                    showSnackBar(requireView(), resources.getString(R.string.success), true)
+                } else {
+                    binding.progressBar3.visibility = View.GONE
+                    showSnackBar(
+                        requireView(),
+                        resources.getString(R.string.upload_profile_img_err_msg),
+                        false
+                    )
+                }
+            }
+            Log.d(TAG, "onViewCreated: ${FirebaseAuth.getInstance().currentUser?.uid!!}")
+        }
     }
 
-    private fun showAlert(){
+    private fun getUserProfileImage() {
+        lifecycleScope.launch {
+            user = profileViewModel.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid)
+            if (profileViewModel.imageUri == null){
+                Glide.with(this@ProfileFragment).load(user?.profileImgUrl).into(binding.profileImgView)
+            }else{
+                Glide.with(this@ProfileFragment).load(profileViewModel.imageUri).into(binding.profileImgView)
+            }
+        }
+    }
+
+    private fun showAlert() {
         /** pop up warning window for confirmation of logging out from account
          * if it's logged out, it will move to login page*/
 
@@ -119,10 +163,10 @@ class ProfileFragment : Fragment() {
         theDialog.show()
     }
 
-    private fun updatePostImgUI() {
+    private fun updateProfileImgUI() {
         try {
             val imageStream: InputStream =
-                requireContext().contentResolver.openInputStream(profileViewModel.imageUri!!)!!
+                profileViewModel.imageUri?.let { requireContext().contentResolver.openInputStream(it) }!!
             val selectedImageBitmap = BitmapFactory.decodeStream(imageStream)
             binding.profileImgView.setImageBitmap(selectedImageBitmap)
         } catch (e: FileNotFoundException) {

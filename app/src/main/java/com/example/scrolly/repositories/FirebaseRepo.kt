@@ -6,18 +6,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import com.example.scrolly.models.Like
 import com.example.scrolly.models.Post
 import com.example.scrolly.models.User
 import com.example.scrolly.utils.Constants
-import com.example.scrolly.utils.showSnackBar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -31,25 +30,35 @@ class FirebaseRepo {
     val firebaseAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private val storageRef = Firebase.storage.reference
-    private val postsCollectionRef = db.collection(Constants.POST)
-    private val usersCollectionRef = db.collection(Constants.USER)
-
+    private val postsCollectionRef = db.collection(Constants.POSTS)
+    private val usersCollectionRef = db.collection(Constants.USERS)
 
     // Register with new member
-    fun register(email: String, password: String) = firebaseAuth.createUserWithEmailAndPassword(email, password)
+    fun register(email: String, password: String) =
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
 
     // Create User Profile
-    fun createProfile(user: User) = usersCollectionRef.document(user.id).set(user)
+    fun createProfile(user: User) {
+        user.id = firebaseAuth.currentUser!!.uid
+        usersCollectionRef.document(user.id).set(user)
+    }
 
-    fun getUserInfo(id: String): User {
-        var user = User()
-         usersCollectionRef.document(id).get().addOnSuccessListener {
-             user = it.toObject(User::class.java)!!
+    suspend fun getUserInfo(id: String?): User? {
+        var user: User? = null
+        if (id != null) {
+            usersCollectionRef.document(id).get().addOnSuccessListener {
+                user = it.toObject(User::class.java)
+            }.await()
         }
-
         return user
     }
-    suspend fun uploadProfileImage(userId: String, uri: Uri){
+
+    fun isUserLoggedIn(): Boolean {
+        return !firebaseAuth.currentUser?.uid.isNullOrBlank()
+    }
+
+    suspend fun uploadProfileImage(uri: Uri): Boolean {
+        var isSuccess: Boolean? = null
         val date = Date()
         val dateFormat = "dd-MMM-yyyy-hh:mm:ss"
         val dateString = android.text.format.DateFormat.format(dateFormat, date)
@@ -66,16 +75,16 @@ class FirebaseRepo {
             ref.downloadUrl
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                isSuccess = true
                 val downloadUri = task.result
-                //TODO: there is a bug here where uid isn't okey
-                postsCollectionRef.document(userId).update("profileImgUrl", downloadUri.toString())
-                Log.d(TAG, "uploadProfileImage: $downloadUri")
-                Log.d(TAG, "uploadProfileImage: ${firebaseAuth.currentUser?.uid.toString()}")
-                Log.d(TAG, "uploadProfileImage: ")
+                usersCollectionRef.document(firebaseAuth.currentUser!!.uid)
+                    .update("profileImgUrl", downloadUri.toString())
             } else {
+                isSuccess = false
                 throw IllegalStateException("uploadImage(): Failed getting download url")
             }
         }.await()
+        return isSuccess!!
     }
 
     // Login with current user (signIn)
@@ -84,7 +93,8 @@ class FirebaseRepo {
 
 
     // this function is to upload images to FireStore
-    private suspend fun uploadImage(postId: String, imageUri: Uri) {
+    private fun uploadImage(postId: String, imageUri: Uri) {
+//        var isSuccess: Boolean? = null
         val date = Date()
         val dateFormat = "dd-MMM-yyyy-hh:mm:ss"
         val dateString = android.text.format.DateFormat.format(dateFormat, date)
@@ -93,33 +103,33 @@ class FirebaseRepo {
         val uploadTask = ref.putFile(imageUri)
 
         val urlTask = uploadTask.continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let {
-                        throw it
-                    }
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
                 }
+            }
             ref.downloadUrl
-            }.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val downloadUri = task.result
-                    postsCollectionRef.document(postId).update("postImageUrl", downloadUri.toString())
-                } else {
-                    throw IllegalStateException("uploadImage(): Failed getting download url")
-                }
-            }.await()
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+
+                postsCollectionRef.document(postId)
+                    .update("postImageUrl", downloadUri.toString())
+            } else {
+                throw IllegalStateException("uploadImage(): Failed getting download url")
+            }
+        }
     }
 
 
     // upload post Info to fireStore
     suspend fun uploadPost(post: Post, postImgUri: Uri?): Boolean {
         var isSuccessful: Boolean? = null
-
+        post.userId = firebaseAuth.currentUser!!.uid
         postsCollectionRef.document(post.id).set(post).addOnSuccessListener {
             isSuccessful = true
-            postImgUri?.let { uri ->
-                CoroutineScope(IO).launch {
-                     uploadImage(post.id, uri)
-                }
+            postImgUri?.let {
+                uploadImage(post.id, it)
             }
         }.addOnFailureListener {
             isSuccessful = false
@@ -133,8 +143,21 @@ class FirebaseRepo {
         postsCollectionRef.get().addOnSuccessListener { snapshot ->
             posts.value = snapshot.toObjects(Post::class.java)
         }
-        Log.d(TAG, "getPosts: $posts")
         return posts
+    }
+
+    fun addLike(postId: String) {
+        postsCollectionRef.document(postId)
+            .update("likes", FieldValue.arrayUnion(Like(firebaseAuth.currentUser!!.uid)))
+    }
+
+    suspend fun deleteLike(postId: String) {
+        var post = postsCollectionRef.document(postId).get().await().toObject(Post::class.java)
+        val newLikes = post?.likes?.filter {
+            it.userId != firebaseAuth.currentUser!!.uid
+        }
+        postsCollectionRef.document(postId)
+            .update("likes", newLikes)
     }
 
     companion object {

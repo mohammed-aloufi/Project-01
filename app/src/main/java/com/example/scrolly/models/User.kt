@@ -3,7 +3,7 @@ package com.example.scrolly.models
 import java.util.*
 
 data class User(
-    val id: String = UUID.randomUUID().toString(),
-    val userName: String = "",
-    val profileImgUrl: String = ""
+    var id: String = "",
+    var userName: String = "",
+    var profileImgUrl: String = ""
 )

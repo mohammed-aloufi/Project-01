@@ -72,7 +72,8 @@
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/send_post_btn_corners"
+        android:background="@drawable/strikeshape"
+        android:backgroundTint="@color/green"
         android:text="@string/send_btn_label"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,6 +88,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="30dp"
         android:src="@drawable/ic_launcher_foreground"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_msg_EditTxt" />

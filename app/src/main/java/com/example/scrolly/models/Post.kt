@@ -6,7 +6,7 @@ data class Post(
     val id: String = UUID.randomUUID().toString(),
     var postMessage: String? = null,
     val postImageUrl: String? = null,
-    val likes: Int = 0,
+    var likes: MutableList<Like> = mutableListOf(),
     val timestamp: Long? = Date().time,
-    val userId: String = ""
+    var userId: String = ""
 )
