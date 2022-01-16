@@ -1,11 +1,13 @@
 package com.example.scrolly.feature_timeline
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scrolly.models.Post
 import com.example.scrolly.models.User
 import com.example.scrolly.repositories.FirebaseRepo
+import com.example.scrolly.repositories.UploadPostState
 import kotlinx.coroutines.launch
 
 private const val TAG = "TimelineViewModel"
@@ -17,7 +19,6 @@ class TimelineViewModel : ViewModel() {
     fun isUserLoggedIn(): Boolean {
         return firebaseRepo.isUserLoggedIn()
     }
-
     fun getPosts(): LiveData<List<Post>>{
         return firebaseRepo.getPosts()
     }

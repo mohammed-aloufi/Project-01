@@ -34,7 +34,6 @@ class TimelineFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTimelineBinding.inflate(layoutInflater)
-
 //        if (!timeLineViewModel.isUserLoggedIn()){
 //            findNavController().navigate(R.id.action_timelineFragment_to_loginFragment)
 //        }
@@ -61,7 +60,9 @@ class TimelineFragment : Fragment() {
                         if (posts.isNotEmpty()){
                             binding.progressBar2.visibility = View.GONE
                         }
-                        binding.timelineRecyclerView.adapter = TimeLineAdapter(posts ?: emptyList())
+                        binding.timelineRecyclerView.adapter = TimeLineAdapter(posts.sortedByDescending {
+                            it.post.timestamp
+                        } ?: emptyList())
                         Log.d(TAG, "observePosts: $posts")
                     }
                 }
@@ -69,12 +70,13 @@ class TimelineFragment : Fragment() {
         }
     }
 
-    var t = false
     private inner class TimeLineViewHolder(val binding: TimelineListItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
             binding.likeImageBtn.setOnClickListener(this)
+            binding.commentImgBtn.visibility = View.INVISIBLE
+            binding.commentTxtView.visibility = View.INVISIBLE
         }
         var post = Post()
         fun bind(post: Posts) {
@@ -96,6 +98,7 @@ class TimelineFragment : Fragment() {
         }
 
         override fun onClick(v: View?) {
+
             when(v){
                 binding.likeImageBtn -> {
                     if (timeLineViewModel.isUserLoggedIn()){

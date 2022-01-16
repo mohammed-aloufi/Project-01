@@ -2,7 +2,6 @@ package com.example.scrolly.profile
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -16,13 +15,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import coil.load
 import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate
 import com.bumptech.glide.Glide
 import com.example.scrolly.R
 import com.example.scrolly.databinding.FragmentProfileBinding
+import com.example.scrolly.models.User
+import com.example.scrolly.utils.showSnackBar
 import com.google.firebase.auth.FirebaseAuth
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
@@ -32,6 +31,8 @@ private const val TAG = "ProfileFragment"
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val profileViewModel by activityViewModels<ProfileViewModel>()
+
+    private var user: User? = null
 
     private val getPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -43,9 +44,14 @@ class ProfileFragment : Fragment() {
     ) { imageUri ->
         imageUri?.let {
             profileViewModel.imageUri = imageUri
-            updatePostImgUI()
+            updateProfileImgUI()
             binding.saveChangesBtn.visibility = View.VISIBLE
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+            getUserProfileImage()
     }
 
     override fun onCreateView(
@@ -78,14 +84,7 @@ class ProfileFragment : Fragment() {
 //        binding.shimmerViewContainer.stopShimmer()
 //        binding.shimmerViewContainer.visibility = View.GONE
         binding.profileImgView.visibility = View.VISIBLE
-        lifecycleScope.launch {
-            val user = profileViewModel.getUserInfo(FirebaseAuth.getInstance().currentUser!!.uid)
-            binding.profileImgView.load(user?.profileImgUrl) {
-                placeholder(R.drawable.ic_launcher_foreground)
-                crossfade(250)
-            }
 
-        }
 
         profileViewModel.getUser()?.let {
             Log.d(TAG, it.displayName.toString())
@@ -109,8 +108,34 @@ class ProfileFragment : Fragment() {
             }
         }
         binding.saveChangesBtn.setOnClickListener {
-            profileViewModel.uploadProfileImage(profileViewModel.imageUri!!)
+            binding.progressBar3.visibility = View.VISIBLE
+            lifecycleScope.launch {
+                var isSuccess = profileViewModel.uploadProfileImage(profileViewModel.imageUri!!)
+                if (isSuccess) {
+                    binding.progressBar3.visibility = View.GONE
+                    getUserProfileImage()
+                    showSnackBar(requireView(), resources.getString(R.string.success), true)
+                } else {
+                    binding.progressBar3.visibility = View.GONE
+                    showSnackBar(
+                        requireView(),
+                        resources.getString(R.string.upload_profile_img_err_msg),
+                        false
+                    )
+                }
+            }
             Log.d(TAG, "onViewCreated: ${FirebaseAuth.getInstance().currentUser?.uid!!}")
+        }
+    }
+
+    private fun getUserProfileImage() {
+        lifecycleScope.launch {
+            user = profileViewModel.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid)
+            if (profileViewModel.imageUri == null){
+                Glide.with(this@ProfileFragment).load(user?.profileImgUrl).into(binding.profileImgView)
+            }else{
+                Glide.with(this@ProfileFragment).load(profileViewModel.imageUri).into(binding.profileImgView)
+            }
         }
     }
 
@@ -138,10 +163,10 @@ class ProfileFragment : Fragment() {
         theDialog.show()
     }
 
-    private fun updatePostImgUI() {
+    private fun updateProfileImgUI() {
         try {
             val imageStream: InputStream =
-                requireContext().contentResolver.openInputStream(profileViewModel.imageUri!!)!!
+                profileViewModel.imageUri?.let { requireContext().contentResolver.openInputStream(it) }!!
             val selectedImageBitmap = BitmapFactory.decodeStream(imageStream)
             binding.profileImgView.setImageBitmap(selectedImageBitmap)
         } catch (e: FileNotFoundException) {

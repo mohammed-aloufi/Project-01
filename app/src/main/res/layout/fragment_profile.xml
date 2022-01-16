@@ -8,38 +8,40 @@
     android:background="@drawable/profile"
     tools:context=".profile.ProfileFragment">
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_view_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:backgroundTint="@android:color/transparent"
-            app:shimmer_clip_to_children="true"
-            app:shimmer_colored="false"
-            app:shimmer_highlight_color="@android:color/transparent"
-            app:shimmer_intensity="20"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shimmer_clip_to_children="true"
+        app:shimmer_colored="false"
+        app:shimmer_highlight_color="@android:color/transparent"
+        app:shimmer_intensity="20">
+
+        <ImageView
+            android:id="@+id/profileHolderImgView"
+            android:layout_width="410dp"
+            android:layout_height="201dp"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <ImageView
-                android:id="@+id/profileHolderImgView"
-                android:layout_width="410dp"
-                android:layout_height="201dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </com.facebook.shimmer.ShimmerFrameLayout>
+            app:layout_constraintTop_toTopOf="parent" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <ImageView
         android:id="@+id/profileImgView"
         android:layout_width="410dp"
         android:layout_height="201dp"
-        android:visibility="invisible"
         android:scaleType="centerCrop"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -185,4 +187,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

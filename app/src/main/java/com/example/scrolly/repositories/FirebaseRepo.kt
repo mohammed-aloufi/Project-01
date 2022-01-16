@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.example.scrolly.models.Like
 import com.example.scrolly.models.Post
 import com.example.scrolly.models.User
@@ -32,7 +33,6 @@ class FirebaseRepo {
     private val postsCollectionRef = db.collection(Constants.POSTS)
     private val usersCollectionRef = db.collection(Constants.USERS)
 
-
     // Register with new member
     fun register(email: String, password: String) =
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -43,12 +43,13 @@ class FirebaseRepo {
         usersCollectionRef.document(user.id).set(user)
     }
 
-    suspend fun getUserInfo(id: String): User? {
+    suspend fun getUserInfo(id: String?): User? {
         var user: User? = null
-        usersCollectionRef.document(id).get().addOnSuccessListener {
-            user = it.toObject(User::class.java)
-        }.await()
-
+        if (id != null) {
+            usersCollectionRef.document(id).get().addOnSuccessListener {
+                user = it.toObject(User::class.java)
+            }.await()
+        }
         return user
     }
 
@@ -56,7 +57,8 @@ class FirebaseRepo {
         return !firebaseAuth.currentUser?.uid.isNullOrBlank()
     }
 
-    suspend fun uploadProfileImage(uri: Uri) {
+    suspend fun uploadProfileImage(uri: Uri): Boolean {
+        var isSuccess: Boolean? = null
         val date = Date()
         val dateFormat = "dd-MMM-yyyy-hh:mm:ss"
         val dateString = android.text.format.DateFormat.format(dateFormat, date)
@@ -73,12 +75,16 @@ class FirebaseRepo {
             ref.downloadUrl
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                isSuccess = true
                 val downloadUri = task.result
-                usersCollectionRef.document(firebaseAuth.currentUser!!.uid).update("profileImgUrl", downloadUri.toString())
+                usersCollectionRef.document(firebaseAuth.currentUser!!.uid)
+                    .update("profileImgUrl", downloadUri.toString())
             } else {
+                isSuccess = false
                 throw IllegalStateException("uploadImage(): Failed getting download url")
             }
         }.await()
+        return isSuccess!!
     }
 
     // Login with current user (signIn)
@@ -87,7 +93,8 @@ class FirebaseRepo {
 
 
     // this function is to upload images to FireStore
-    private suspend fun uploadImage(postId: String, imageUri: Uri) {
+    private fun uploadImage(postId: String, imageUri: Uri) {
+//        var isSuccess: Boolean? = null
         val date = Date()
         val dateFormat = "dd-MMM-yyyy-hh:mm:ss"
         val dateString = android.text.format.DateFormat.format(dateFormat, date)
@@ -105,11 +112,13 @@ class FirebaseRepo {
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUri = task.result
-                postsCollectionRef.document(postId).update("postImageUrl", downloadUri.toString())
+
+                postsCollectionRef.document(postId)
+                    .update("postImageUrl", downloadUri.toString())
             } else {
                 throw IllegalStateException("uploadImage(): Failed getting download url")
             }
-        }.await()
+        }
     }
 
 
@@ -119,10 +128,8 @@ class FirebaseRepo {
         post.userId = firebaseAuth.currentUser!!.uid
         postsCollectionRef.document(post.id).set(post).addOnSuccessListener {
             isSuccessful = true
-            postImgUri?.let { uri ->
-                CoroutineScope(IO).launch {
-                    uploadImage(post.id, uri)
-                }
+            postImgUri?.let {
+                uploadImage(post.id, it)
             }
         }.addOnFailureListener {
             isSuccessful = false

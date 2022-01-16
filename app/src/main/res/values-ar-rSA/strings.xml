@@ -42,5 +42,6 @@
     <string name="success">تم</string>
     <string name="upload_post_error_msg">تعذر الارسال</string>
     <string name="login_to_use_msg">الرجاء تسجيل الدخول</string>
+    <string name="upload_profile_img_err_msg">الرجاء المحاولة لاحقا</string>
 
 </resources>

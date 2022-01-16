@@ -40,6 +40,7 @@
     <string name="save_changes_btn">Save</string>
     <string name="success">Success</string>
     <string name="upload_post_error_msg">Unable to upload post.</string>
+    <string name="upload_profile_img_err_msg">Please try again later</string>
     <string name="login_to_use_msg">You have to login to use this feature.</string>
 
 </resources>
