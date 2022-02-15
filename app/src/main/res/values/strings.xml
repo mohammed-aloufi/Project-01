@@ -6,12 +6,12 @@
     <string name="email">Email Address</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="New">New here? Register</string>
+    <string name="New">New here?</string>
     <string name="Register">Register</string>
     <string name="Username">Username</string>
     <string name="confirmPass">Confirm Password</string>
     <string name="register">Register</string>
-    <string name="register1">Already a member? Login</string>
+    <string name="register1">Already a member?</string>
     <string name="new_post_txt_hint">What\'s on your mind?</string>
     <string name="send_btn_label">Post</string>
     <string name="cancel_btn_desc">cancel</string>
