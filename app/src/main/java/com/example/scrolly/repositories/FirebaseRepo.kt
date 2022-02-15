@@ -53,6 +53,14 @@ class FirebaseRepo {
         return user
     }
 
+    fun getPosts(): LiveData<List<Post>> {
+        var posts: MutableLiveData<List<Post>> = MutableLiveData<List<Post>>()
+        postsCollectionRef.get().addOnSuccessListener { snapshot ->
+            posts.value = snapshot.toObjects(Post::class.java)
+        }
+        return posts
+    }
+
     fun isUserLoggedIn(): Boolean {
         return !firebaseAuth.currentUser?.uid.isNullOrBlank()
     }
@@ -138,13 +146,7 @@ class FirebaseRepo {
         return isSuccessful!!
     }
 
-    fun getPosts(): LiveData<List<Post>> {
-        var posts: MutableLiveData<List<Post>> = MutableLiveData<List<Post>>()
-        postsCollectionRef.get().addOnSuccessListener { snapshot ->
-            posts.value = snapshot.toObjects(Post::class.java)
-        }
-        return posts
-    }
+
 
     fun addLike(postId: String) {
         postsCollectionRef.document(postId)
