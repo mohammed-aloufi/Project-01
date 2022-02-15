@@ -51,7 +51,7 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            getUserProfileImage()
+
     }
 
     override fun onCreateView(
@@ -60,6 +60,7 @@ class ProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false)
+        getUserProfileImage()
         return binding.root
     }
 
